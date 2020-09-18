@@ -10,12 +10,12 @@ import sys
 ground_z = 0.0
 
 # files to save
-well_fig = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataA_GWelev.png'
-ETg_fig = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataA_ETg.png'
+well_fig = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataC_GWelev.png'
+ETg_fig = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataC_ETg.png'
 
 # files to read
-file = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataA.mat'
-key = 'GroundwaterDataA'
+file = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataC.mat'
+key = 'GroundwaterDataC'
 
 # import .mat file using loadmat
 gwts = loadmat(file)[key]     
@@ -59,15 +59,17 @@ for day in day_dt.keys():
         gwz_nt = day_gwz[day][nt]
         x2plt.append(day+dec_day)
         y2plt.append(gwz_nt)
-        
-ymin = max(0.0,min(y2plt)*1.1)
-ymax = max(y2plt)*0.9
+
 
 fig = plt.figure(figsize=(7,5))
 ax = fig.add_subplot(111,facecolor='whitesmoke')
 ax.plot(x2plt,y2plt,color='blue')
 
+
+#ymin = max(0.0,min(y2plt)*1.1)
+#ymax = max(y2plt)*0.9
 #ax.set_ylim(ymin,ymax)
+
 ax.set_xlabel('Day of year')
 ax.set_ylabel('Water table elevation (relative to ground surface) [L]')
 plt.title('%s' % key)
@@ -101,7 +103,7 @@ for di in range(day0,dayn):
     # calculate change in storage for each day
     max_di = max(day_gwz[di])
     max_di1 = max(day_gwz[di+1])
-    dS[di] = max_di1 - max_di       # dS<0 indicates lowering water table
+    dS[di] = max_di - max_di1       # dS>0 indicates lowering water table
 
     # build empty lists for the day that includes only data from 0:00 through 4:00, inclusive 
     gw4R = []
@@ -143,10 +145,10 @@ ETg_hi = []
 x2plt = []
 
 for day in dS.keys():
-    if dS[day] < 0:                                         # check that storage has decreased over the day
+    if dS[day] > 0:                                         # check that storage has gone down from one day to next
         if R[day] > 0:                                      # check that recharge has occurred over night
             x2plt.append(day)
-            ETg_lo.append( SY_lo*(dS[day] + t*R[day]) )
+            ETg_lo.append( SY_lo*(dS[day] + t*R[day]) )    
             ETg_md.append( SY_md*(dS[day] + t*R[day]) )
             ETg_hi.append( SY_hi*(dS[day] + t*R[day]) )
         else:
