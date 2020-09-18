@@ -4,8 +4,6 @@ import matplotlib as mp
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-import sys
-
 # assume ground elevation to convert depth of water table to GW 
 ground_z = 0.0
 
@@ -162,7 +160,6 @@ ax.plot(x2plt,ETg_lo,linestyle='',marker='_',color='darkgray')
 ax.plot(x2plt,ETg_hi,linestyle='',marker='_',color='darkgray')
 ax.plot(x2plt,ETg_md,linestyle='',marker='.',color='black')
 
-#ax.set_ylim(ymin,ymax)
 ax.set_xlabel('Day of year')
 ax.set_ylabel('ETg [L]/day')
 plt.title('%s' % key)
