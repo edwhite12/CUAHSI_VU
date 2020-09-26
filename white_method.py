@@ -8,12 +8,12 @@ from sklearn.linear_model import LinearRegression
 ground_z = 0.0
 
 # files to save
-well_fig = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataC_GWelev.png'
-ETg_fig = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataC_ETg.png'
+well_fig = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataB_GWelev.png'
+ETg_fig = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataB_ETg_capped.png'
 
 # files to read
-file = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataC.mat'
-key = 'GroundwaterDataC'
+file = r'D:\OneDrive - Tulane University\RCSE-6900 CUAHSI VU\ecohydrology_groundwater\HW_1\GroundwaterDataB.mat'
+key = 'GroundwaterDataB'
 
 # import .mat file using loadmat
 gwts = loadmat(file)[key]     
@@ -160,6 +160,7 @@ ax.plot(x2plt,ETg_lo,linestyle='',marker='_',color='darkgray')
 ax.plot(x2plt,ETg_hi,linestyle='',marker='_',color='darkgray')
 ax.plot(x2plt,ETg_md,linestyle='',marker='.',color='black')
 
+#ax.set_ylim(0,0.1)
 ax.set_xlabel('Day of year')
 ax.set_ylabel('ETg [L]/day')
 plt.title('%s' % key)
