@@ -19,9 +19,6 @@ key = 'GroundwaterDataB'
 gwts = loadmat(file)[key]     
 
 # read data into dictionaries with integer day as the dict key
-# during the first timestep of any day the 'try' statement will fail
-# the 'except' statement will initialize an empty list for the day
-# once the empty list exists for the day, the individual datapoints and timesteps are appended 
 day_dt = {}
 day_gwz = {}
 
@@ -30,13 +27,13 @@ for row in gwts:
     dc_day = row[0]-day
     gw_d = row[1]
     try:
-        checknum = float(gw_d) # will check if input values are strings
-        if np.isnan(float(gw_d)) == False:
-            try:
-                day_dt[day].append(dc_day)
+        checknum = float(gw_d)                          # will fail if input values are strings and exception will be triggered
+        if np.isnan(float(gw_d)) == False:              # check for NaNs
+            try:                                    
+                day_dt[day].append(dc_day)              # will fail if first timestep of a new day and dc_day is not yet a key in day_dt - trigger exception
                 day_gwz[day].append(ground_z - gw_d)    # convert depth to groundwater to watertable elevation
             except:                 
-                day_dt[day] = []
+                day_dt[day] = []                        # if exception first add integer day as a key to day_dt and day_gwz with an empty list
                 day_gwz[day] = []
                 day_dt[day].append(dc_day)
                 day_gwz[day].append(ground_z - gw_d)
@@ -48,6 +45,8 @@ for row in gwts:
 del(gwts)
 
 # plot well hydrograph
+# could let matplotlib handle DateTime instance instead of x2plt list
+# this would allow for a bit more flexibility in the formatting of the timecode in the original data files (including calendar dates instead of elapsed time)
 x2plt = []
 y2plt = []
 
@@ -145,7 +144,7 @@ x2plt = []
 for day in dS.keys():
     if dS[day] > 0:                                         # check that storage has gone down from one day to next
         if R[day] > 0:                                      # check that recharge has occurred over night
-            x2plt.append(day)
+            x2plt.append(day)                               # could let matplotlib handle DateTime instance instead of x2plt list, which would allow for a bit more flexibility in the formatting of the timecode in the original data files
             ETg_lo.append( SY_lo*(dS[day] + t*R[day]) )    
             ETg_md.append( SY_md*(dS[day] + t*R[day]) )
             ETg_hi.append( SY_hi*(dS[day] + t*R[day]) )
