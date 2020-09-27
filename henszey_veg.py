@@ -5,9 +5,9 @@ import matplotlib as mp
 import matplotlib.pyplot as plt
 
 
-def m8035(L7h,a,b,c):
+def m8035(L7H,a,b,c):
     if c > 0:
-        X = ((L7h-b)/c)**2
+        X = ((L7H-b)/c)**2
         f = a*scipy.special.erfc(X)
         return(f)
     else:
@@ -16,21 +16,21 @@ def m8035(L7h,a,b,c):
 
 def m8036(L7h,a,b,c):
     if c > 0:
-        if L7h >= b:
-            X = (L7h-b)/c
+        if L7H >= b:
+            X = (L7H-b)/c
             eX = np.e**(-X)  
             f = 4*a*eX*(1-eX)
             return(f)
         else:
-            return('error: L7h < b')
+            return('error: L7H < b')
     else:
         return('error: c <= 0') 
 
 
-def m8036(L7h,a,b,c,d):
+def m8036(L7H,a,b,c,d):
     if c != 0:
         if d != 0:
-            numer = L7h - c*ln(2**(1/d)-1) - b
+            numer = L7H - c*ln(2**(1/d)-1) - b
             f = a / ( (1 + np.e**(numer/c))**d )
             return(f)
         else:
@@ -39,7 +39,7 @@ def m8036(L7h,a,b,c,d):
         return('error: d = 0') 
         
 
-spp = ['Symphyotrichum lanceolatum','Sorghastrum nutans','Ambrosia psilostachya']
+
 wells = ['GroundwaterDataA','GroundwaterDataB','GroundwaterDataC']
 
 for well in wells:
@@ -101,33 +101,30 @@ for well in wells:
 
             t_all.append(day+dec_day)
             z_all.append(gwz_nt)
-        if day < dayn - 6:
+        if day > day0 + 6:
             z_sum = 0
             z_cnt = 0
             for daymn in range(0,7):
-                z_sum += np.mean(day_gwz[day+daymn])
+                z_sum += np.mean(day_gwz[day-daymn])
                 z_cnt += 1
             if z_cnt > 0:
                 t_day.append(day)
                 z_7d.append(z_sum/z_cnt)
 
-
-
+    L7L = min(z_7d)
+    L7H = max(z_7d)
+    footnote = 'L7L = %0.2f; L7H = %0.2f' % (L7L,L7H)
     fig = plt.figure(figsize=(7,5))
     ax = fig.add_subplot(111,facecolor='whitesmoke')
     ax.plot(t_all,z_all,linestyle='',marker='.',color='darkgray')
     ax.plot(t_day,z_7d,color='black')
 
-
-#ymin = max(0.0,min(y2plt)*1.1)
-#ymax = max(y2plt)*0.9
-#ax.set_ylim(ymin,ymax)
-
     ax.set_xlabel('Day of year')
     ax.set_ylabel('Water table elevation (relative to ground surface) [L]')
     plt.title('%s' % key)
-    plt.show()
-    #plt.savefig(well_fig)
+    plt.figtext(0.99,0.01,footnote,horizontalalignment='right',fontsize='small')
+    #plt.show()
+    plt.savefig(well_fig)
 
  
 
